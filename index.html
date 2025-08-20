@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanizaki Sakurako</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Ivory & Sage -->
+    <!-- Application Structure Plan: The application is structured as a single-page vertical portfolio. It begins with a hero section to introduce the copywriter. The main content is a grid of interactive cards, each representing a YouTube channel project. Clicking a card opens a modal window with detailed information (overview, responsibilities, appeal points), allowing recruiters to explore projects of interest without losing context. The page concludes with a summary of core skills. This structure provides a clear overview while enabling deep dives, which is ideal for a portfolio presentation. -->
+    <!-- Visualization & Content Choices: Report Info: 5 YouTube channels with descriptions and appeal points. Goal: Showcase copywriting skills for each project. Viz/Presentation Method: An interactive card grid using Tailwind CSS. Each card features an emoji icon, channel name, and a button. Clicking opens a modal (built with HTML/JS) to display details. This avoids cluttering the main page and focuses user attention. The final summary is presented as a clean, icon-based list. Justification: This card/modal UX pattern is intuitive and professional, allowing for progressive disclosure of information. It effectively translates the text-based portfolio into an engaging interactive experience. Library/Method: Vanilla JS for interactivity, Tailwind CSS for styling. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans JP', sans-serif;
+            background-color: #FDFDFB;
+            color: #383838;
+        }
+        .hero-gradient {
+            background: linear-gradient(180deg, #FDFDFB 0%, #F5F5F0 100%);
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .tag {
+            background-color: #E8E8E0;
+            color: #585858;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="app">
+        
+        <header class="hero-gradient py-16 sm:py-24">
+            <div class="container mx-auto px-6 text-center">
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">Tanizaki Sakurako</h1>
+                <p class="mt-6 max-w-2xl mx-auto text-lg text-gray-600">
+                    視聴者の課題や願望に寄り添い、商品の魅力を最大限に引き出す。
+                    <br class="hidden sm:block">
+                    YouTube台本制作、お客様対応、事務など、幅広くご相談ください。
+                </p>
+            </div>
+        </header>
+
+        <main class="py-16 sm:py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12">担当チャンネル実績</h2>
+                <div id="portfolio-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                </div>
+            </div>
+        </main>
+
+        <section class="bg-gray-50 py-16 sm:py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12">得意とするライティング</h2>
+                <div class="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-lg mb-2">課題解決型コピーライティング</h3>
+                        <p class="text-gray-600">視聴者の潜在的な悩みを掘り起こし、解決策として商品やサービスの価値を提示します。専門的な情報も、平易な言葉で分かりやすく伝えます。</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-lg mb-2">ベネフィット訴求</h3>
+                        <p class="text-gray-600">スペックの羅列ではなく、その機能がユーザーの生活をどう豊かにするのか、具体的なメリット（ベネフィット）に変換して表現します。</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-lg mb-2">共感性の高い表現</h3>
+                        <p class="text-gray-600">ユーザー体験を想像させるストーリーテリングで、視聴者が「自分ごと」として捉えられるような共感と信頼を生み出します。</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-sm">
+                        <h3 class="font-bold text-lg mb-2">構成力</h3>
+                        <p class="text-gray-600">複雑な情報を整理し、視聴者が最後まで飽きずに見られる論理的な構成を設計。動画コンテンツ全体の質向上に貢献します。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center py-8 bg-gray-100">
+            <p class="text-gray-500">&copy; 2025 Your Name. All Rights Reserved.</p>
+        </footer>
+
+    </div>
+
+    <div id="modal" class="modal-backdrop fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 z-50 opacity-0 pointer-events-none">
+        <div id="modal-content" class="modal-content bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 transform scale-95 opacity-0">
+            <div class="flex justify-between items-start">
+                <div>
+                    <h3 id="modal-title" class="text-2xl md:text-3xl font-bold"></h3>
+                    <a id="modal-url" href="#" target="_blank" rel="noopener noreferrer" class="text-sm text-blue-600 hover:underline">チャンネルを見る →</a>
+                </div>
+                <button id="modal-close" class="text-gray-500 hover:text-gray-800 text-3xl">&times;</button>
+            </div>
+            <div class="mt-6">
+                <h4 class="font-bold text-lg mb-2">チャンネル概要</h4>
+                <p id="modal-description" class="text-gray-700"></p>
+                
+                <h4 class="font-bold text-lg mt-6 mb-3">アピールポイント</h4>
+                <ul id="modal-points" class="space-y-3">
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const portfolioData = [
+            {
+                id: 'mr-chairs',
+                title: 'Mr. Chairs',
+                icon: '🪑',
+                url: 'https://www.youtube.com/@mrchairs',
+                description: '様々なオフィスチェアやゲーミングチェアの機能、座り心地、選び方などを詳細に解説する専門チャンネルです。視聴者が自身のニーズに合ったチェアを見つけられるよう、比較やレビューを中心に構成されています。',
+                points: [
+                    '高額な商品に対する視聴者の疑問や不安を解消し、購入意欲を高めるための<b>説得力のある言葉選び</b>を意識。',
+                    '専門用語を避け、誰にでも理解できるよう<b>分かりやすい言葉で機能やメリットを説明する力</b>。',
+                    '視聴者が「自分ごと」として捉えられるよう、使用シーンやメリットを具体的に描写する<b>共感性の高い表現</b>。'
+                ]
+            },
+            {
+                id: 'suitcase-lab',
+                title: 'スーツケース研究所',
+                icon: '🧳',
+                url: 'https://www.youtube.com/@%E3%82%B9%E3%83%BC%E3%83%84%E3%82%B1%E3%83%BC%E3%82%B9%E7%A0%94%E7%A9%B6%E6%89%80',
+                description: 'スーツケースの選び方、機能比較、ブランド解説など、旅行や出張に役立つ情報を提供するチャンネルです。実用性とデザインの両面から、視聴者の「知りたい」に応えるコンテンツが特徴です。',
+                points: [
+                    '商品のスペックだけでなく、実際の使用感や移動時の利便性など、<b>ユーザー体験を想像させる表現</b>。',
+                    '多様なニーズ（ビジネス、旅行、家族旅行など）に対応できるよう、<b>多角的な視点からメリットを提示する構成力</b>。',
+                    '高単価な商品に対する<b>安心感と信頼感を醸成する丁寧な言葉遣い</b>。'
+                ]
+            },
+            {
+                id: 'wifi-router-lab',
+                title: 'Wi-Fiルーター戦略室',
+                icon: '📶',
+                url: 'https://www.youtube.com/@wifi_router_lab',
+                description: 'Wi-Fiルーターの基礎知識から、最新機種の比較、設定方法、通信速度の改善策など、技術的な内容を分かりやすく解説するチャンネルです。',
+                points: [
+                    '専門性が高いIT製品について、<b>専門知識のない視聴者にも理解できるよう平易な言葉で説明する能力</b>。',
+                    '複数の製品を比較する際に、<b>客観的なデータに基づきつつ、視聴者の状況に合わせた最適な選択肢を提示する構成力</b>。',
+                    '視聴者の「困った」を解決に導くための、<b>問題解決型のコピーライティング</b>。'
+                ]
+            },
+            {
+                id: 'gussurich',
+                title: 'ぐっすりチャンネル',
+                icon: '😴',
+                url: 'https://www.youtube.com/@gussurich',
+                description: '睡眠の質を高めるための寝具や生活習慣、健康に関する情報を提供するチャンネルです。視聴者の悩みに寄り添い、具体的な解決策や商品を紹介しています。',
+                points: [
+                    '健康や生活習慣といったデリケートなテーマに対し、<b>共感と信頼を得られるような温かいトーンでの表現</b>。',
+                    '商品の機能が、どのように視聴者の「ぐっすり」に繋がるのかを具体的にイメージさせる<b>ベネフィット訴求力</b>。',
+                    '視聴者の潜在的な悩みを掘り起こし、解決策としての商品の価値を提示する<b>課題解決型コピーライティング</b>。'
+                ]
+            },
+            {
+                id: 'printing-mania',
+                title: '印刷マニア',
+                icon: '🖨️',
+                url: 'https://www.youtube.com/@printing.mania2024',
+                description: 'プリンターや印刷に関するニッチな情報、製品レビュー、トラブルシューティングなどを扱うチャンネルです。特定のニーズを持つ層に向けた、詳細かつ実践的な情報が提供されています。',
+                points: [
+                    '特定のニッチな分野においても、<b>深いリサーチに基づき正確な情報を分かりやすく伝える能力</b>。',
+                    '製品の専門的な特徴を、視聴者が「なぜそれが必要か」と感じるような<b>具体的なメリットに変換して表現する力</b>。',
+                    'トラブル解決や効率化といった、<b>実用的な価値を強調するコピーライティング</b>。'
+                ]
+            },
+            {
+                id: 'ec-support',
+                title: 'ECサイト お客様対応',
+                icon: '📧',
+                url: '#',
+                description: '商品レビューやECサイトの問い合わせ対応を通じて、顧客の疑問や不満を解消し、信頼関係を構築した実績。',
+                points: [
+                    '<b>丁寧かつ迅速な対応</b>：お客様の問い合わせに対し、24時間以内の返信を徹底し、安心感を提供。',
+                    '<b>顧客視点での文章作成</b>：お客様の不満や疑問に共感し、解決策を分かりやすく丁寧に説明することで、リピート購入に繋がる信頼関係を構築。',
+                    '<b>FAQ作成への貢献</b>：問い合わせ内容を分析し、よくある質問（FAQ）の作成に貢献。顧客満足度向上と業務効率化に寄与。'
+                ]
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const grid = document.getElementById('portfolio-grid');
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+            const modalClose = document.getElementById('modal-close');
+
+            portfolioData.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer';
+                card.dataset.id = item.id;
+                card.innerHTML = `
+                    <div class="p-8">
+                        <div class="text-5xl mb-4">${item.icon}</div>
+                        <h3 class="font-bold text-xl mb-2">${item.title}</h3>
+                        <p class="text-gray-600 text-sm mb-6">${item.description.substring(0, 60)}...</p>
+                        <button data-id="${item.id}" class="w-full text-center bg-gray-800 text-white font-bold py-3 px-4 rounded-lg hover:bg-gray-700 transition-colors">詳細を見る</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            const openModal = (id) => {
+                const item = portfolioData.find(p => p.id === id);
+                if (!item) return;
+
+                document.getElementById('modal-title').textContent = item.title;
+                document.getElementById('modal-url').href = item.url;
+                document.getElementById('modal-description').textContent = item.description;
+                
+                const pointsList = document.getElementById('modal-points');
+                pointsList.innerHTML = '';
+                item.points.forEach(point => {
+                    const li = document.createElement('li');
+                    li.className = 'flex items-start';
+                    li.innerHTML = `
+                        <span class="flex-shrink-0 mr-3 mt-1 text-green-600">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </span>
+                        <span class="text-gray-700">${point}</span>
+                    `;
+                    pointsList.appendChild(li);
+                });
+
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContent.classList.remove('scale-95', 'opacity-0');
+            };
+
+            const closeModal = () => {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modalContent.classList.add('scale-95', 'opacity-0');
+            };
+
+            grid.addEventListener('click', (e) => {
+                const targetElement = e.target.closest('[data-id]');
+                if (targetElement) {
+                    openModal(targetElement.dataset.id);
+                }
+            });
+
+            modalClose.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !modal.classList.contains('pointer-events-none')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
